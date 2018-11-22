@@ -88,7 +88,9 @@ public class ManagerController {
         CheckParamUtils.isNull(managerNumber, "登录账号不能为空！");
         CheckParamUtils.isNull(managerPwd, "登录密码不能为空！");
         long nowMillis = DateUtils.getNowTimeMillis();
+        System.out.println(managerNumber + "managerPwd ==> " +  managerPwd);
         Manager managerInfo = managerService.managerLogin(managerNumber, managerPwd, nowMillis);
+        System.out.println("manager" + managerInfo.toString());
         // 登录成功，将用户保存到session中
         HttpSession session = request.getSession();
         session.setAttribute(managerInfo.getManagerNumber(), managerInfo);
