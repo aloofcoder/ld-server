@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.le.baseframe.core.dao.UserDao">
+
+    <select id="searchUser" resultType="map">
+        SELECT
+        u.id,
+        u.user_num userNumber,
+        u.user_name userName,
+        u.user_gender userGender,
+        u.user_mobile userMobile,
+        u.user_address userAddress,
+        u.mobile_date mobileDate,
+        u.user_marriage userMarriage,
+        u.children_num childrenNum,
+        u.support_num supportNum,
+        u.user_education userEducation,
+        u.is_nowcity isNowCity,
+        u.user_houseregister userHouseRegister,
+        u.live_type liveType,
+        u.live_startdate liveStartDate,
+        u.month_wages monthWages,
+        u.company_properties companyProperties,
+        u.is_privatecompany isPrivateCompany,
+        u.user_position userPosition,
+        u.user_positionlevel userPositionLevel,
+        u.is_servant isServant,
+        u.user_department userDepartment,
+        u.join_companydate joinCompanyDate,
+        u.company_mobile companyMobile,
+        u.put_wagestype putWagesType,
+        u.company_createdate companyCreateDate,
+        u.company_social companySocial,
+        u.company_socialdate companySocialDate,
+        u.company_socialbase companySocialBase,
+        u.user_pdf userPdf,
+        u.pdf_createdate pdfCreateDate,
+        u.pdf_base pdfBase,
+        u.house_type houseType,
+        u.house_buy_date houseBuyDate,
+        u.house_money houseMoney,
+        u.house_acreage houseAcreage,
+        u.house_address houseAddress,
+        u.house_is_address houseIsAddress,
+        u.house_loanyear houseLoanYear,
+        u.house_repayment_money houseRepaymentMoney,
+        u.has_house_repayment hasHouseRepayment,
+        u.car_buytype carBuyType,
+        u.car_buydate carBuyDate,
+        u.car_money carMoney,
+        u.car_course carCourse,
+        u.car_repayment_money carRepaymentMoney,
+        u.car_brand carBrand,
+        u.car_inputdate carInputDate,
+        u.car_color carColor,
+        u.car_model carModel,
+        u.car_safe carSafe,
+        u.car_hasfault carHasFault,
+        u.linkman_nexus1 linkmanNexus1,
+        u.linkman_nexus2 linkmanNexus2,
+        u.linkman_nexus3 linkmanNexus3,
+        u.user_idcard userIdCard,
+        u.user_idcardurl userIdCardUrl,
+        u.user_imgurl userImgUrl,
+        u.user_profession userProfession,
+        u.user_company userCompany,
+        u.user_companyadr userCompanyAdr,
+        u.linkman_name1 linkmanName1,
+        u.linkman_mobile1 linkmanMobile1,
+        u.linkman_name2 linkmanName2,
+        u.linkman_mobile2 linkmanMobile2,
+        u.linkman_name3 linkmanName3,
+        u.linkman_mobile3 linkmanMobile3,
+        u.user_status userStatus,
+        u.user_remark userRemark,
+        u.create_user createUser,
+        u.edit_user editUser,
+        u.create_time createTime,
+        u.edit_time editTime,
+        l.id loanID,
+        l.user_id userId,
+        l.loan_product_type loanProductType,
+        l.loan_purpose loanPurpose,
+        l.loan_repayment loanRepayment,
+        l.loan_date loanDate,
+        l.loan_money loanMoney,
+        l.loan_interest loanInterest,
+        l.loan_periods loanPeriods,
+        l.loan_interest_period loanInterestPeriod,
+        l.loan_type loanType,
+        l.loan_pledge loanPledge,
+        l.loan_status loanStatus,
+        l.loan_remarks loanRemarks
+        FROM user_info u
+        LEFT JOIN loan_info l ON u.id = l.user_id
+      WHERE u.user_status = 0
+      <include refid="isCondition"/>
+      ORDER BY u.create_time DESC
+      limit #{startIndex}, #{pageSize};
+    </select>
+
+    <!-- 查询用户信息总条数 -->
+    <select id="getRowCount" resultType="int">
+        SELECT count(1) FROM user_info u
+        LEFT JOIN loan_info l ON u.id = l.user_id
+        WHERE u.user_status = 0
+        <include refid="isCondition"/>
+    </select>
+
+    <sql id="isCondition">
+        <if test="condition != null and condition != ''">
+            AND ${condition}
+        </if>
+    </sql>
+
+    <select id="searchUserById" resultMap="userResultMap" parameterType="long">
+      SELECT * FROM user_info WHERE id = #{userId}
+    </select>
+
+    <select id="searchUserByUserNum" resultMap="userResultMap" parameterType="string">
+        SELECT * FROM user_info WHERE user_num = #{userNumber}
+        AND user_status = 0
+    </select>
+    <!-- 添加用户信息 -->
+    <insert id="insertUser" parameterType="map">
+        INSERT INTO user_info
+        (id,user_num,user_name,user_gender,user_mobile,user_address,mobile_date,user_marriage,
+        children_num,support_num,user_education,is_nowcity,user_houseregister,live_type,live_startdate,
+        month_wages,company_properties,is_privatecompany,user_position, user_positionlevel,is_servant,user_department,
+        join_companydate,company_mobile,put_wagestype,company_createdate,company_social,company_socialdate,
+        company_socialbase,user_pdf,pdf_createdate,pdf_base,house_type,house_buy_date,house_money,house_acreage,
+        house_address,house_is_address,house_loanyear,house_repayment_money,has_house_repayment,car_buytype,car_buydate,
+        car_money,car_course,car_repayment_money,car_brand, car_inputdate, car_color, car_model, car_safe,
+        car_hasfault, linkman_nexus1, linkman_nexus2,linkman_nexus3,user_idcard,user_idcardurl,user_imgurl,
+        user_profession,user_company,user_companyadr,linkman_name1,linkman_mobile1,
+        linkman_name2,linkman_mobile2,linkman_name3,linkman_mobile3,user_status,user_remark,create_user,
+        edit_user,create_time,edit_time)
+        VALUES (NULL, #{userNumber},
+        #{userName},#{userGender},#{userMobile},#{userAddress},#{mobileDate},#{userMarriage},
+        #{childrenNum},#{supportNum},#{userEducation},#{isNowCity},#{userHouseRegister},#{liveType},
+        #{liveStartDate},#{monthWages},#{companyProperties},#{isPrivateCompany},#{userPosition}, #{userPositionLevel},
+        #{isServant},#{userDepartment}, #{joinCompanyDate},#{companyMobile},#{putWagesType},
+        #{companyCreateDate},#{companySocial},#{companySocialDate},#{companySocialBase},#{userPdf},
+        #{pdfCreateDate},#{pdfBase},#{houseType},#{houseBuyDate},#{houseMoney},#{houseAcreage},
+        #{houseAddress},#{houseIsAddress},#{houseLoanYear},#{houseRepaymentMoney},
+        #{hasHouseRepayment},#{carBuyType},#{carBuyDate},#{carMoney},#{carCourse},#{carRepaymentMoney},
+        #{carBrand},#{carInputDate},#{carColor},#{carModel},#{carSafe},#{carHasFault},#{linkmanNexus1},
+        #{linkmanNexus2},#{linkmanNexus3},#{userIdCard},#{userIdCardUrl},#{userImgUrl},#{userProfession},
+        #{userCompany},#{userCompanyAdr},#{linkmanName1},#{linkmanMobile1},#{linkmanName2},#{linkmanMobile2},
+        #{linkmanName3},#{linkmanMobile3},0,#{userRemark},#{createUser},#{editUser},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()));
+    </insert>
+
+    <!-- 修改用户 -->
+    <update id="updateUser" parameterType="map">
+      UPDATE user_info SET user_num = #{userNumber},
+      user_name = #{userName},
+      user_gender = #{userGender},
+      user_mobile = #{userMobile},
+      user_address = #{userAddress},
+      mobile_date = #{mobileDate},
+      user_marriage = #{userMarriage},
+      children_num = #{childrenNum},
+      support_num = #{supportNum},
+      user_education = #{userEducation},
+      is_nowcity = #{isNowCity},
+      user_houseregister = #{userHouseRegister},
+      live_type = #{liveType},
+      live_startdate = #{liveStartDate},
+      month_wages = #{monthWages},
+      company_properties = #{companyProperties},
+      is_privatecompany = #{isPrivateCompany},
+      user_position = #{userPosition},
+      user_positionlevel = #{userPositionLevel},
+      is_servant = #{isServant},
+      user_department = #{userDepartment},
+      join_companydate = #{joinCompanyDate},
+      company_mobile = #{companyMobile},
+      put_wagestype = #{putWagesType},
+      company_createdate = #{companyCreateDate},
+      company_social = #{companySocial},
+      company_socialdate = #{companySocialDate},
+      company_socialbase = #{companySocialBase},
+      user_pdf = #{userPdf},
+      pdf_createdate = #{pdfCreateDate},
+      pdf_base = #{pdfBase},
+      house_type = #{houseType},
+      house_buy_date = #{houseBuyDate},
+      house_money = #{houseMoney},
+      house_acreage = #{houseAcreage},
+      house_address = #{houseAddress},
+      house_is_address = #{houseIsAddress},
+      house_loanyear = #{houseLoanYear},
+      house_repayment_money = #{houseRepaymentMoney},
+      has_house_repayment = #{hasHouseRepayment},
+      car_buytype = #{carBuyType},
+      car_buydate = #{carBuyDate},
+      car_money = #{carMoney},
+      car_course = #{carCourse},
+      car_repayment_money = #{carRepaymentMoney},
+      car_brand = #{carBrand},
+      car_inputdate = #{carInputDate},
+      car_color = #{carColor},
+      car_model = #{carModel},
+      car_safe = #{carSafe},
+      car_hasfault = #{carHasFault},
+      linkman_nexus1 = #{linkmanNexus1},
+      linkman_nexus2 = #{linkmanNexus2},
+      linkman_nexus3 = #{linkmanNexus3},
+      user_idcard = #{userIdCard},
+      user_idcardurl = #{userIdCardUrl},
+      user_imgurl = #{userImgUrl},
+      user_profession = #{userProfession},
+      user_company = #{userCompany},
+      user_companyadr = #{userCompanyAdr},
+      linkman_name1 = #{linkmanName1},
+      linkman_mobile1 = #{linkmanMobile1},
+      linkman_name2 = #{linkmanName2},
+      linkman_mobile2 = #{linkmanMobile2},
+      linkman_name3 = #{linkmanName3},
+      linkman_mobile3 = #{linkmanMobile3},
+      user_status = #{userStatus},
+      user_remark = #{userRemark},
+      create_user = #{createUser},
+      edit_user = #{editUser},
+      create_time = #{createTime},
+      edit_time = UNIX_TIMESTAMP(NOW())
+      WHERE id = #{id}
+    </update>
+
+    <!-- 删除用户 -->
+    <update id="deleteUser" parameterType="long">
+        UPDATE user_info SET user_status = 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 用户信息与表对应关系 -->
+    <resultMap id="userResultMap" type="user">
+        <id property="id" column="id"></id>
+        <result property="userNumber" column="user_num"></result>
+        <result property="userName" column="user_name"></result>
+        <result property="userGender" column="user_gender"></result>
+        <result property="userMobile" column="user_mobile"></result>
+        <result property="userAddress" column="user_address"></result>
+        <result property="mobileDate" column="mobile_date"></result>
+        <result property="userMarriage" column="user_marriage"></result>
+        <result property="childrenNum" column="children_num"></result>
+        <result property="supportNum" column="support_num"></result>
+        <result property="userEducation" column="user_education"></result>
+        <result property="isNowCity" column="is_nowcity"></result>
+        <result property="userHouseRegister" column="user_houseregister"></result>
+        <result property="liveType" column="live_type"></result>
+        <result property="liveStartDate" column="live_startdate"></result>
+        <result property="monthWages" column="month_wages"></result>
+        <result property="companyProperties" column="company_properties"></result>
+        <result property="isPrivateCompany" column="is_privatecompany"></result>
+        <result property="userPosition" column="user_position"></result>
+        <result property="userPositionLevel" column="user_positionlevel"></result>
+        <result property="isServant" column="is_servant"></result>
+        <result property="userDepartment" column="user_department"></result>
+        <result property="joinCompanyDate" column="join_companydate"></result>
+        <result property="companyMobile" column="company_mobile"></result>
+        <result property="putWagesType" column="put_wagestype"></result>
+        <result property="companyCreateDate" column="company_createdate"></result>
+        <result property="companySocial" column="company_social"></result>
+        <result property="companySocialDate" column="company_socialdate"></result>
+        <result property="companySocialBase" column="company_socialbase"></result>
+        <result property="userPdf" column="user_pdf"></result>
+        <result property="pdfCreateDate" column="pdf_createdate"></result>
+        <result property="pdfBase" column="pdf_base"></result>
+        <result property="houseType" column="house_type"></result>
+        <result property="houseBuyDate" column="house_buy_date"></result>
+        <result property="houseMoney" column="house_money"></result>
+        <result property="houseAcreage" column="house_acreage"></result>
+        <result property="houseAddress" column="house_address"></result>
+        <result property="houseIsAddress" column="house_is_address"></result>
+        <result property="houseLoanYear" column="house_loanyear"></result>
+        <result property="houseRepaymentMoney" column="house_repayment_money"></result>
+        <result property="hasHouseRepayment" column="has_house_repayment"></result>
+        <result property="carBuyType" column="car_buytype"></result>
+        <result property="carBuyDate" column="car_buydate"></result>
+        <result property="carMoney" column="car_money"></result>
+        <result property="carCourse" column="car_course"></result>
+        <result property="carRepaymentMoney" column="car_repayment_money"></result>
+        <result property="carBrand" column="car_brand"></result>
+        <result property="carInputDate" column="car_inputdate"></result>
+        <result property="carColor" column="car_color"></result>
+        <result property="carModel" column="car_model"></result>
+        <result property="carSafe" column="car_safe"></result>
+        <result property="carHasFault" column="car_hasfault"></result>
+        <result property="linkmanNexus1" column="linkman_nexus1"></result>
+        <result property="linkmanNexus2" column="linkman_nexus2"></result>
+        <result property="linkmanNexus3" column="linkman_nexus3"></result>
+        <result property="userIdCard" column="user_idcard"></result>
+        <result property="userIdCardUrl" column="user_idcardurl"></result>
+        <result property="userImgUrl" column="user_imgurl"></result>
+        <result property="userProfession" column="user_profession"></result>
+        <result property="userCompany" column="user_company"></result>
+        <result property="userCompanyAdr" column="user_companyadr"></result>
+        <result property="linkmanName1" column="linkman_name1"></result>
+        <result property="linkmanMobile1" column="linkman_mobile1"></result>
+        <result property="linkmanName2" column="linkman_name2"></result>
+        <result property="linkmanMobile2" column="linkman_mobile2"></result>
+        <result property="linkmanName3" column="linkman_name3"></result>
+        <result property="linkmanMobile3" column="linkman_mobile3"></result>
+        <result property="userStatus" column="user_status"></result>
+        <result property="userRemark" column="user_remark"></result>
+        <result property="createUser" column="create_user"></result>
+        <result property="editUser" column="edit_user"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="editTime" column="edit_time"></result>
+    </resultMap>
+</mapper>
