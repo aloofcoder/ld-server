@@ -94,7 +94,7 @@ public class ManagerController {
         // 登录成功，将用户保存到session中
         HttpSession session = request.getSession();
         session.setAttribute(managerInfo.getManagerNumber(), managerInfo);
-        Cookie cookie = new Cookie("loginUser", managerInfo.getManagerNumber().toString());
+        Cookie cookie = new Cookie("loginUser", managerInfo.getManagerNumber());
         // cookie 有效期为2小时
         cookie.setMaxAge(60 * 60 * 2);
         response.addCookie(cookie);
@@ -119,6 +119,7 @@ public class ManagerController {
         }
         HttpSession session = request.getSession();
         Manager manager = (Manager) session.getAttribute(loginUser);
+        System.out.println("manager ==> " + manager);
         if (manager == null) {
             throw new AppServiceException("当前登录已过期！");
         }
