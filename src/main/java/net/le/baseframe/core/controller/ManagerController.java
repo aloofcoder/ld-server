@@ -91,7 +91,7 @@ public class ManagerController {
         Manager managerInfo = managerService.managerLogin(managerNumber, managerPwd, nowMillis);
         // 登录成功，将用户保存到session中
         HttpSession session = request.getSession();
-        session.setAttribute(managerInfo.getManagerNumber().toString(), managerInfo);
+        session.setAttribute(managerInfo.getManagerNumber(), managerInfo);
         Cookie cookie = new Cookie("loginUser", managerInfo.getManagerNumber().toString());
         // cookie 有效期为2小时
         cookie.setMaxAge(60 * 60 * 2);

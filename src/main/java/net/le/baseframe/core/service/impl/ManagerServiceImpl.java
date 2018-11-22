@@ -52,6 +52,7 @@ public class ManagerServiceImpl implements ManagerService {
             throw new AppServiceException("用户" + managerNumber + "不存在，请检查您输入的账号！");
         }
         String pwd = manager.getManagerPwd();
+        log.debug(pwd + "pwd ---------- managerPwd" + managerPwd);
         if (!pwd.equals(managerPwd)) {
             throw new AppServiceException("密码错误，请检查你的登录密码！");
         }
